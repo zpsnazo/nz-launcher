@@ -36,6 +36,14 @@
         animation: spin 40s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    /* Сетка на фоне */
+    .bg-grid {
+        position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 30%, transparent 85%);
+        -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 30%, transparent 85%);
+    }
     /* Свечение за курсором, как в лаунчере */
     #cursorGlow {
         position: fixed; width: 360px; height: 360px; left: 0; top: 0; z-index: 0;
@@ -122,6 +130,12 @@
         transition: box-shadow 0.3s ease;
     }
     .shot-frame img { display: block; width: 100%; height: auto; }
+    /* Сетка скриншотов */
+    .shot-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .shot-row .shot-frame { cursor: zoom-in; }
+    #lightbox { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 14px; box-shadow: 0 0 70px rgba(255,255,255,0.12); }
     /* 3D-наклон скриншота за мышью */
     .tilt { perspective: 1100px; }
     .tilt .shot-frame { transform-style: preserve-3d; will-change: transform; }
@@ -198,6 +212,7 @@
 <div class="orb o2"></div>
 <div class="orb o3"></div>
 <div class="aurora"></div>
+<div class="bg-grid"></div>
 <div id="cursorGlow"></div>
 <div id="progress"></div>
 
@@ -248,7 +263,7 @@
             <div class="feat reveal"><h3 data-i18n="f3t">Категории сборок</h3><p data-i18n="f3p">Раскладывай сборки по категориям простым перетаскиванием. Порядок сборок сохраняется.</p></div>
             <div class="feat reveal"><h3 data-i18n="f4t">Автообновление</h3><p data-i18n="f4p">Новые версии лаунчера прилетают сами — кнопка обновления находится прямо в шапке.</p></div>
             <div class="feat reveal"><h3 data-i18n="f5t">Своя папка игры</h3><p data-i18n="f5p">Папку с игрой, модами и мирами можно перенести в любое место диска из настроек лаунчера.</p></div>
-            <div class="feat reveal"><h3 data-i18n="f6t">Своё оформление</h3><p data-i18n="f6p">Поставь на фон картинку, GIF или даже видео. Интерфейс можно настроить под себя.</p></div>
+            <div class="feat reveal"><h3 data-i18n="f6t">Своё оформление</h3><p data-i18n="f6p">Поставь на фон свою картинку. Интерфейс можно настроить под себя.</p></div>
         </div>
     </section>
 
@@ -256,26 +271,19 @@
         <div class="sec-title reveal" data-i18n="secNewsT">НОВОСТИ</div>
         <div class="sec-sub reveal" data-i18n="secNewsS">Что нового в лаунчере</div>
         <div class="faq">
-            <div class="qa reveal"><span class="news-date">13.09.2026</span><h3 data-i18n="n1t">Техническое обновление</h3><p data-i18n="n1p">Быстрое скачивание сборок Modrinth и CurseForge, обновление модов в один клик, смена версии Minecraft прямо в сборке, оптимизация памяти и плавности интерфейса.</p></div>
+            <div class="qa reveal"><span class="news-date">18.09.2026</span><h3 data-i18n="n2t">Вышла версия 1.0.7</h3><p data-i18n="n2p">Обнови лаунчер и играй — новая версия уже доступна для скачивания.</p></div>
+            <div class="qa reveal"><span class="news-date">05.09.2026</span><h3 data-i18n="n3t">Релиз</h3><p data-i18n="n3p">NZ Launcher официально вышел. Скачай бесплатно и собери свой Minecraft.</p></div>
         </div>
     </section>
 
     <section id="shots">
         <div class="sec-title reveal" data-i18n="secShotsT">ТАК ВЫГЛЯДИТ ЛАУНЧЕР</div>
         <div class="sec-sub reveal" data-i18n="secShotsS">Главный экран, сборки и настройки</div>
-        <div class="show reveal">
-            <div class="shot-frame"><img src="img/shot-builds.jpg" alt="Раздел сборок NZ Launcher"></div>
-            <div>
-                <h3 data-i18n="sh1t">Все сборки — на одном экране</h3>
-                <p data-i18n="sh1p">Список сборок с иконками и версиями, разбивка по категориям. Сборки перетаскиваются между категориями, кнопка «Играть» запускает игру в один клик.</p>
-            </div>
-        </div>
-        <div class="show rev reveal">
-            <div class="shot-frame"><img src="img/shot-ui.jpg" alt="Настройки интерфейса NZ Launcher"></div>
-            <div>
-                <h3 data-i18n="sh2t">Интерфейс под себя</h3>
-                <p data-i18n="sh2p">Темы оформления, свой фон для главного экрана — картинка, GIF или видео. Настройки применяются сразу, без перезапуска.</p>
-            </div>
+        <div class="sec-sub reveal" style="margin-top:-24px">Нажми на скриншот, чтобы рассмотреть ближе</div>
+        <div class="shot-row">
+            <div class="shot-frame reveal"><img src="img/shot-home.jpg" alt="Главный экран NZ Launcher"></div>
+            <div class="shot-frame reveal"><img src="img/shot-builds.jpg" alt="Раздел сборок NZ Launcher"></div>
+            <div class="shot-frame reveal"><img src="img/shot-ui.jpg" alt="Настройки интерфейса NZ Launcher"></div>
         </div>
     </section>
 
@@ -314,6 +322,16 @@
         </div>
     </section>
 
+    <section id="support">
+        <div class="sec-title reveal" data-i18n="secSupT">ПОДДЕРЖИ ЛАУНЧЕР</div>
+        <div class="sec-sub reveal" data-i18n="secSupS">NZ Launcher недавно открылся — помоги ему вырасти</div>
+        <div class="faq">
+            <div class="qa reveal"><h3 data-i18n="sup1t">Расскажи друзьям</h3><p data-i18n="sup1p">Скинь ссылку на сайт в чат, на стрим или друзьям. Это бесплатно, но очень помогает продвижению.</p></div>
+            <div class="qa reveal"><h3 data-i18n="sup2t">Заходи в Discord</h3><p data-i18n="sup2p">Новости, помощь и общение — в нашем Discord. Чем больше людей, тем живее проект.</p></div>
+            <div class="qa reveal"><h3 data-i18n="sup3t">Сообщай об ошибках</h3><p data-i18n="sup3p">Нашёл баг или есть идея? Напиши в Discord или Telegram — каждый отчёт делает лаунчер лучше.</p></div>
+        </div>
+    </section>
+
     <section id="social">
         <div class="sec-title reveal" data-i18n="secSocT">МЫ НА СВЯЗИ</div>
         <div class="sec-sub reveal" data-i18n="secSocS">Новости, помощь и общение — в наших соцсетях</div>
@@ -349,12 +367,13 @@
             f3t: 'Категории сборок', f3p: 'Раскладывай сборки по категориям простым перетаскиванием. Порядок сборок сохраняется.',
             f4t: 'Автообновление', f4p: 'Новые версии лаунчера прилетают сами — кнопка обновления находится прямо в шапке.',
             f5t: 'Своя папка игры', f5p: 'Папку с игрой, модами и мирами можно перенести в любое место диска из настроек лаунчера.',
-            f6t: 'Своё оформление', f6p: 'Поставь на фон картинку, GIF или даже видео. Интерфейс можно настроить под себя.',
+            f6t: 'Своё оформление', f6p: 'Поставь на фон свою картинку. Интерфейс можно настроить под себя.',
             secNewsT: 'НОВОСТИ', secNewsS: 'Что нового в лаунчере',
-            n1t: 'Техническое обновление', n1p: 'Быстрое скачивание сборок Modrinth и CurseForge, обновление модов в один клик, смена версии Minecraft прямо в сборке, оптимизация памяти и плавности интерфейса.',
+            n2t: 'Вышла версия 1.0.7', n2p: 'Обнови лаунчер и играй — новая версия уже доступна для скачивания.',
+            n3t: 'Релиз', n3p: 'NZ Launcher официально вышел. Скачай бесплатно и собери свой Minecraft.',
             secShotsT: 'ТАК ВЫГЛЯДИТ ЛАУНЧЕР', secShotsS: 'Главный экран, сборки и настройки',
             sh1t: 'Все сборки — на одном экране', sh1p: 'Список сборок с иконками и версиями, разбивка по категориям. Сборки перетаскиваются между категориями, кнопка «Играть» запускает игру в один клик.',
-            sh2t: 'Интерфейс под себя', sh2p: 'Темы оформления, свой фон для главного экрана — картинка, GIF или видео. Настройки применяются сразу, без перезапуска.',
+            sh2t: 'Интерфейс под себя', sh2p: 'Темы оформления, свой фон для главного экрана — картинка на твой вкус. Настройки применяются сразу, без перезапуска.',
             secStepsT: 'НАЧАТЬ ЗА 3 ШАГА', secStepsS: 'От скачивания до игры — пять минут',
             st1t: 'Скачай', st1p: 'Загрузи установщик для Windows и запусти его. Установка занимает минуту.',
             st2t: 'Создай сборку', st2p: 'Выбери версию игры и загрузчик — или установи готовый модпак из каталога.',
@@ -380,12 +399,13 @@
             f3t: 'Build categories', f3p: 'Sort builds into categories by simple drag and drop. Build order is saved.',
             f4t: 'Auto-update', f4p: 'New launcher versions arrive on their own — the update button sits right in the header.',
             f5t: 'Custom game folder', f5p: 'Move the folder with the game, mods and worlds anywhere on disk from launcher settings.',
-            f6t: 'Custom look', f6p: 'Put a picture, GIF or even video as background. The interface can be tuned to your taste.',
+            f6t: 'Custom look', f6p: 'Set your own picture as background. The interface can be tuned to your taste.',
             secNewsT: 'NEWS', secNewsS: 'What is new in the launcher',
-            n1t: 'Technical update', n1p: 'Fast Modrinth and CurseForge modpack downloads, one-click mod updates, Minecraft version switching right inside the build, memory and smoothness optimizations.',
+            n2t: 'Version 1.0.7 released', n2p: 'Update the launcher and play — the new version is already available for download.',
+            n3t: 'Release', n3p: 'NZ Launcher is officially out. Download for free and build your Minecraft.',
             secShotsT: 'HOW THE LAUNCHER LOOKS', secShotsS: 'Home screen, builds and settings',
             sh1t: 'All builds on one screen', sh1p: 'Build list with icons and versions, split into categories. Builds drag between categories, the Play button launches the game in one click.',
-            sh2t: 'Interface your way', sh2p: 'Design themes, custom home background — picture, GIF or video. Settings apply instantly, no restart.',
+            sh2t: 'Interface your way', sh2p: 'Design themes, custom home background — a picture of your choice. Settings apply instantly, no restart.',
             secStepsT: 'START IN 3 STEPS', secStepsS: 'From download to game in five minutes',
             st1t: 'Download', st1p: 'Grab the Windows installer and run it. Installation takes a minute.',
             st2t: 'Create a build', st2p: 'Pick a game version and loader — or install a ready modpack from the catalog.',
@@ -493,5 +513,21 @@
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
 })();
 </script>
+    <div id="lightbox"><img src="" alt=""></div>
+    <script>
+    (function () {
+        var lb = document.getElementById('lightbox');
+        var lbImg = lb.querySelector('img');
+        document.querySelectorAll('.shot-row .shot-frame').forEach(function (f) {
+            f.addEventListener('click', function () {
+                var im = f.querySelector('img');
+                if (im) lbImg.src = im.src;
+                lb.classList.add('open');
+            });
+        });
+        lb.addEventListener('click', function () { lb.classList.remove('open'); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+    })();
+    </script>
 </body>
 </html>
