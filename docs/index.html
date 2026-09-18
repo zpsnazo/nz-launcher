@@ -271,7 +271,7 @@
         <div class="sec-title reveal" data-i18n="secNewsT">НОВОСТИ</div>
         <div class="sec-sub reveal" data-i18n="secNewsS">Что нового в лаунчере</div>
         <div class="faq">
-            <div class="qa reveal"><span class="news-date">18.09.2026</span><h3 data-i18n="n2t">Вышла версия 1.0.7</h3><p data-i18n="n2p">Обнови лаунчер и играй — новая версия уже доступна для скачивания.</p></div>
+            <div class="qa reveal"><span class="news-date">18.09.2026</span><h3 data-i18n="n2t">Вышла версия 1.0.7</h3><p data-i18n="n2p">Обнови лаунчер и играй. Починили ошибку «Не удалось закрыть» при обновлении, из сборок больше не лезут лишние файлы.</p></div>
             <div class="qa reveal"><span class="news-date">05.09.2026</span><h3 data-i18n="n3t">Релиз</h3><p data-i18n="n3p">NZ Launcher официально вышел. Скачай бесплатно и собери свой Minecraft.</p></div>
         </div>
     </section>
@@ -346,7 +346,7 @@
 </div>
 
 <footer>
-    <a href="https://github.com/zpsnazo/nz-launcher/releases/latest" data-i18n="ftDl">Скачать</a>
+    <a href="https://github.com/zpsnazo/nz-launcher/releases/download/v1.0.6/NZ.Launcher.Setup.1.0.6.exe" id="dlBtn3" data-i18n="ftDl">Скачать</a>
     <a href="https://github.com/zpsnazo/nz-launcher">GitHub</a>
     <a href="https://discord.gg/CxHKcWDSBF">Discord</a>
     <br><br>
@@ -369,7 +369,7 @@
             f5t: 'Своя папка игры', f5p: 'Папку с игрой, модами и мирами можно перенести в любое место диска из настроек лаунчера.',
             f6t: 'Своё оформление', f6p: 'Поставь на фон свою картинку. Интерфейс можно настроить под себя.',
             secNewsT: 'НОВОСТИ', secNewsS: 'Что нового в лаунчере',
-            n2t: 'Вышла версия 1.0.7', n2p: 'Обнови лаунчер и играй — новая версия уже доступна для скачивания.',
+            n2t: 'Вышла версия 1.0.7', n2p: 'Обнови лаунчер и играй. Починили ошибку «Не удалось закрыть» при обновлении, из сборок больше не лезут лишние файлы.',
             n3t: 'Релиз', n3p: 'NZ Launcher официально вышел. Скачай бесплатно и собери свой Minecraft.',
             secShotsT: 'ТАК ВЫГЛЯДИТ ЛАУНЧЕР', secShotsS: 'Главный экран, сборки и настройки',
             sh1t: 'Все сборки — на одном экране', sh1p: 'Список сборок с иконками и версиями, разбивка по категориям. Сборки перетаскиваются между категориями, кнопка «Играть» запускает игру в один клик.',
@@ -401,7 +401,7 @@
             f5t: 'Custom game folder', f5p: 'Move the folder with the game, mods and worlds anywhere on disk from launcher settings.',
             f6t: 'Custom look', f6p: 'Set your own picture as background. The interface can be tuned to your taste.',
             secNewsT: 'NEWS', secNewsS: 'What is new in the launcher',
-            n2t: 'Version 1.0.7 released', n2p: 'Update the launcher and play — the new version is already available for download.',
+            n2t: 'Version 1.0.7 released', n2p: 'Update the launcher and play. Fixed the close error during updates, builds stay clean of junk files.',
             n3t: 'Release', n3p: 'NZ Launcher is officially out. Download for free and build your Minecraft.',
             secShotsT: 'HOW THE LAUNCHER LOOKS', secShotsS: 'Home screen, builds and settings',
             sh1t: 'All builds on one screen', sh1p: 'Build list with icons and versions, split into categories. Builds drag between categories, the Play button launches the game in one click.',
@@ -471,6 +471,7 @@
     }
     resolve('dlBtn', 'verInfo');
     resolve('dlBtn2', null);
+    resolve('dlBtn3', null);
     // Свечение за курсором, как в лаунчере
     (function () {
         if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -525,9 +526,4 @@
                 lb.classList.add('open');
             });
         });
-        lb.addEventListener('click', function () { lb.classList.remove('open'); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
-    })();
-    </script>
-</body>
-</html>
+        lb.addEventListener('click', functio
