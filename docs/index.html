@@ -120,6 +120,8 @@
         55%, 100% { left: 130%; }
     }
     .ver { margin-top: 14px; font-size: 13px; color: #777; }
+    .dlcount { margin-top: 8px; font-size: 13px; color: #777; }
+    .dlcount b { color: #f0f0f0; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
     .chip { font-size: 12px; font-weight: 700; color: #cfcfcf; border: 1px solid #2c2c2c; background: #141414; border-radius: 20px; padding: 6px 14px; transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; }
     .chip:hover { border-color: #555; color: #fff; box-shadow: 0 0 16px rgba(255,255,255,0.12); }
@@ -241,6 +243,7 @@
             <p data-i18n="heroP">NZ Launcher — бесплатный лаунчер для Windows. Создавай сборки, ставь модпаки из Modrinth и CurseForge, настраивай оформление. Java подберётся сама.</p>
             <a class="dl-btn" id="dlBtn" data-i18n="dlBtn" href="https://github.com/zpsnazo/nz-launcher/releases/download/v1.0.7/NZ.Launcher.Setup.1.0.7.exe">СКАЧАТЬ ДЛЯ WINDOWS</a>
             <div class="ver" id="verInfo">Версия 1.0.7 — скачивание начнётся сразу</div>
+            <div class="dlcount" id="dlCount">Скачиваний: …</div>
             <div class="chips">
                 <span class="chip">Vanilla</span><span class="chip">Forge</span><span class="chip">Fabric</span><span class="chip">NeoForge</span><span class="chip">Quilt</span><span class="chip">Modrinth</span><span class="chip">CurseForge</span>
             </div>
@@ -319,7 +322,6 @@
             <div class="qa reveal"><h3 data-i18n="q2t">На каких системах работает?</h3><p data-i18n="q2p">Сейчас — Windows 10 и 11 (64-bit). Установщик один, ничего дополнительно ставить не нужно.</p></div>
             <div class="qa reveal"><h3 data-i18n="q3t">Нужно ли отдельно ставить Java?</h3><p data-i18n="q3p">Нет. Под каждую версию игры лаунчер сам подбирает и ставит подходящую Java при первом запуске.</p></div>
             <div class="qa reveal"><h3 data-i18n="q4t">Откуда берутся моды и модпаки?</h3><p data-i18n="q4p">Из открытых каталогов Modrinth и CurseForge — установка прямо из лаунчера, файлы проверяются по хешам.</p></div>
-            <div class="qa reveal"><h3 data-i18n="q5t">Антивирус ругается — это безопасно?</h3><p data-i18n="q5p">Да. Код лаунчера полностью открыт — можешь проверить каждую строчку на GitHub. Предупреждение появляется, потому что у проекта пока нет платной цифровой подписи: так Windows помечает все новые программы. Если сомневаешься — проверь установщик на VirusTotal.</p></div>
         </div>
     </section>
 
@@ -386,7 +388,7 @@
             q2t: 'На каких системах работает?', q2p: 'Сейчас — Windows 10 и 11 (64-bit). Установщик один, ничего дополнительно ставить не нужно.',
             q3t: 'Нужно ли отдельно ставить Java?', q3p: 'Нет. Под каждую версию игры лаунчер сам подбирает и ставит подходящую Java при первом запуске.',
             q4t: 'Откуда берутся моды и модпаки?', q4p: 'Из открытых каталогов Modrinth и CurseForge — установка прямо из лаунчера, файлы проверяются по хешам.',
-            q5t: 'Антивирус ругается — это безопасно?', q5p: 'Да. Код лаунчера полностью открыт — можешь проверить каждую строчку на GitHub. Предупреждение появляется, потому что у проекта пока нет платной цифровой подписи: так Windows помечает все новые программы. Если сомневаешься — проверь установщик на VirusTotal.',
+
             secSocT: 'МЫ НА СВЯЗИ', secSocS: 'Новости, помощь и общение — в наших соцсетях',
             ftDl: 'Скачать', ftNote: 'NZ Launcher — бесплатный проект. Не аффилирован с Mojang и Microsoft. Minecraft является товарным знаком Mojang Synergies AB.'
         },
@@ -419,7 +421,7 @@
             q2t: 'Which systems are supported?', q2p: 'Windows 10 and 11 (64-bit) for now. One installer, nothing else to install.',
             q3t: 'Do I need to install Java separately?', q3p: 'No. The launcher picks and installs the right Java for every game version on first launch.',
             q4t: 'Where do mods and modpacks come from?', q4p: 'From the open Modrinth and CurseForge catalogs — install right from the launcher, files are hash-checked.',
-            q5t: 'My antivirus warns me — is it safe?', q5p: 'Yes. The launcher code is fully open — you can check every line on GitHub. The warning appears because the project does not have a paid code signature yet: this is how Windows marks all new programs. If in doubt — scan the installer on VirusTotal.',
+
             secSocT: 'GET IN TOUCH', secSocS: 'News, help and chat in our socials',
             ftDl: 'Download', ftNote: 'NZ Launcher is a free project. Not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang Synergies AB.'
         }
@@ -445,10 +447,47 @@
         var lb = document.getElementById('langBtn');
         if (lb) lb.textContent = LANG === 'en' ? 'RU' : 'EN';
         buildMarquee();
+        try { if (lastDlCount >= 0) showDlCount(lastDlCount); } catch (e) {}
     }
     var langBtnInit = document.getElementById('langBtn');
     if (langBtnInit) langBtnInit.addEventListener('click', function () { applyLang(LANG === 'en' ? 'ru' : 'en'); });
     applyLang(LANG);
+    var lastDlCount = -1;
+    // Счётчик скачиваний: сумма download_count exe по всем релизам.
+    // Один лёгкий запрос к GitHub API, результат кешируется на час.
+    function showDlCount(n) {
+        var box = document.getElementById('dlCount');
+        if (!box) return;
+        lastDlCount = n;
+        var s = Number(n || 0).toLocaleString(LANG === 'en' ? 'en-US' : 'ru-RU');
+        box.innerHTML = (LANG === 'en' ? 'Downloads: <b>' + s + '</b>' : 'Скачиваний: <b>' + s + '</b>');
+        box.style.display = '';
+    }
+    function fetchDlCount() {
+        var box = document.getElementById('dlCount');
+        if (!box) return;
+        try {
+            var cached = JSON.parse(localStorage.getItem('nz-dlcount') || 'null');
+            if (cached && cached.t && (Date.now() - cached.t) < 3600000 && typeof cached.n === 'number') {
+                showDlCount(cached.n);
+                return;
+            }
+        } catch (e) {}
+        fetch('https://api.github.com/zpsnazo/nz-launcher/releases?per_page=100')
+            .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+            .then(function (list) {
+                var n = 0, i, j, a;
+                for (i = 0; i < list.length; i++) {
+                    a = list[i].assets || [];
+                    for (j = 0; j < a.length; j++) {
+                        if (/\.exe$/i.test(a[j].name || '')) n += (a[j].download_count || 0);
+                    }
+                }
+                try { localStorage.setItem('nz-dlcount', JSON.stringify({ t: Date.now(), n: n })); } catch (e) {}
+                showDlCount(n);
+            })
+            .catch(function () { if (box) box.style.display = 'none'; });
+    }
     function resolve(btnId, verId) {
         var btn = document.getElementById(btnId);
         fetch('https://api.github.com/zpsnazo/nz-launcher/releases/latest')
@@ -475,6 +514,7 @@
     resolve('dlBtn', 'verInfo');
     resolve('dlBtn2', null);
     resolve('dlBtn3', null);
+    fetchDlCount();
     // Свечение за курсором, как в лаунчере
     (function () {
         if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -535,4 +575,3 @@
     </script>
 </body>
 </html>
-
